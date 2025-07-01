@@ -23,7 +23,7 @@ const Navbar = ({ isDark, toggleTheme, scrolled, scrollToSection }) => {
           </div>
           
           <div className="flex items-center space-x-4">
-            <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
+            
             <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
              
               <Link to="/login"> Sign In</Link>

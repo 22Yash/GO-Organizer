@@ -14,9 +14,10 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import { generatePdfReport } from "../utils/generatePdfReport";
 
-
 const ScanReport = () => {
   const [loading, setLoading] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState('');
   const [scanResult, setScanResult] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const [history, setHistory] = useState([]);
@@ -39,9 +40,28 @@ const ScanReport = () => {
     }
   }, [userId]);
 
+  const scanSteps = [
+    { label: "Cloning repository", percent: 25 },
+    { label: "Analyzing files", percent: 60 },
+    { label: "Saving results", percent: 90 },
+    { label: "Finalizing", percent: 100 },
+  ];
+
+  const simulateScanProgress = async () => {
+    for (let i = 0; i < scanSteps.length; i++) {
+      setCurrentStep(scanSteps[i].label);
+      setScanProgress(scanSteps[i].percent);
+      await new Promise(resolve => setTimeout(resolve, 700));
+    }
+  };
+
   const handleStartScan = async () => {
     setLoading(true);
+    setScanProgress(0);
+    setCurrentStep('');
     try {
+      simulateScanProgress(); // Run in parallel
+
       const res = await fetch('http://localhost:5000/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -55,7 +75,6 @@ const ScanReport = () => {
       const data = await res.json();
       setScanResult(data);
 
-      // Save report to backend
       await fetch('http://localhost:5000/api/reports', {
         method: 'POST',
         headers: {
@@ -90,8 +109,8 @@ const ScanReport = () => {
   };
 
   const scanCategories = [
-    { icon: FileX, label: 'Unused Files', key: 'unusedFiles', enabled: true },
-    { icon: Search, label: 'Unused Imports', key: 'unusedImports', enabled: true },
+    { icon: FileX, label: 'Unused Files', key: 'unusedFiles', enabled: !!scanResult },
+    { icon: Search, label: 'Unused Imports', key: 'unusedImports', enabled: !!scanResult },
     { icon: Image, label: 'Unused Assets', key: 'unusedAssets', enabled: false },
     { icon: Package, label: 'Duplicate Files', key: 'duplicateFiles', enabled: false },
     { icon: AlertTriangle, label: 'Large Files', key: 'largeFiles', enabled: false },
@@ -137,10 +156,7 @@ const ScanReport = () => {
                 </p>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-500">Repository Size</p>
-              <p className="text-lg font-semibold text-gray-900">--</p>
-            </div>
+            
           </div>
         </div>
 
@@ -151,15 +167,15 @@ const ScanReport = () => {
             <div className="flex gap-4">
               {scanResult && (
                 <button
-                onClick={() =>
-                  generatePdfReport({
-                    repoName: repo.name,
-                    scanType: "Full Scan",
-                    issuesFound: scanResult.unusedFiles?.length || 0,
-                    issues: scanResult.unusedFiles,
-                    createdAt: new Date().toISOString(),
-                  })
-                }
+                  onClick={() =>
+                    generatePdfReport({
+                      repoName: repo.name,
+                      scanType: "Full Scan",
+                      issuesFound: scanResult.unusedFiles?.length || 0,
+                      issues: scanResult.unusedFiles,
+                      createdAt: new Date().toISOString(),
+                    })
+                  }
                   className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex items-center gap-2"
                 >
                   <Download className="w-4 h-4" />
@@ -176,6 +192,20 @@ const ScanReport = () => {
             </div>
           </div>
 
+          {/* Progress bar */}
+          {loading && (
+            <>
+              <p className="text-sm text-gray-600 mb-1">⏳ {currentStep}</p>
+              <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-4">
+                <div
+                  className="h-full bg-blue-500 transition-all duration-500"
+                  style={{ width: `${scanProgress}%` }}
+                ></div>
+              </div>
+            </>
+          )}
+
+          {/* Scan cards */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             {scanCategories.map((option) => (
               <div
@@ -184,7 +214,7 @@ const ScanReport = () => {
                 className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                   option.enabled
                     ? 'border-green-200 bg-green-50 hover:bg-green-100'
-                    : 'border-gray-200 bg-gray-50 cursor-not-allowed'
+                    : 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
                 }`}
               >
                 <option.icon
@@ -203,6 +233,7 @@ const ScanReport = () => {
             ))}
           </div>
 
+          {/* Selected Category Output */}
           {activeCategory && (
             <div className="bg-white border rounded-lg p-4">
               <h4 className="text-md font-semibold text-gray-800 mb-2">

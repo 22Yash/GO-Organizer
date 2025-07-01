@@ -9,6 +9,8 @@ import LoginPage from './pages/Login/LoginPage';
 import Dashboard from './pages/Dashboard';
 import ScanReport from './pages/ScanReport';
 import RepoReportsPage from './pages/RepoReportsPage';
+import ScanDetails from './components/ScanDetails';
+import AllRepositories from './pages/AllRepositories';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
           <Route path="/welcome" element={<Welcome/>}/>
           <Route path="/scanreport" element={<ScanReport/>} />
           <Route path="/reports" element={<RepoReportsPage/>}/>
+          <Route path="/scan-details" element={<ScanDetails/>} />
+          <Route path="/repositories" element={<AllRepositories/>} />
 
         
 

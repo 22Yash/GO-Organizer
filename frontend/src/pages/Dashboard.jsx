@@ -169,7 +169,7 @@ const Dashboard = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">GO</span>
+              <span className="text-white font-bold text-sm" >GO</span>
             </div>
             <h1 className="text-xl font-semibold text-gray-900">
               GitHub Organizer
@@ -215,7 +215,7 @@ const Dashboard = () => {
                     key={index}
                     onClick={() => {
                       if (stat.title === "Total Repositories")
-                        navigate("/reports");
+                        navigate("/repositories");
                       // You can add more logic for other tiles if needed
                     }}
                     className={`border ${stat.color} p-4 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition`}
@@ -348,7 +348,7 @@ const Dashboard = () => {
 
                   <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
                     <FileText className="w-4 h-4" />
-                    <span>View Reports</span>
+                    <span onClick={() => navigate('/repositories')}>View Reports</span>
                   </button>
                 </div>
               </div>

@@ -7,7 +7,10 @@ const connectDB = require("./config/db");
 const authRoutes = require('./routes/auth');
 const githubRoutes = require('./routes/gitub');
 const scanRoutes = require('./routes/scanRoutes');
-const dashboardRoutes = require('./routes/dashboardRoutes')
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const fileRoutes = require("./routes/file");
+const reportRoutes = require('./routes/reportRoutes');
+
 
  
 
@@ -26,5 +29,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/github', githubRoutes);
 app.use('/api/scan',scanRoutes);
 app.use('/api/dashboard',dashboardRoutes );
+app.use("/api/file", fileRoutes);
+
+app.use('/api/reports', reportRoutes);
 
 app.listen(5000, () => console.log('Server running on http://localhost:5000'));
