@@ -8,17 +8,35 @@ const getDashboardSummary = async (req, res) => {
 
     const totalRepos = new Set(activities.map((a) => a.repoName)).size;
     const cleanupsDone = activities.length;
-    const warnings = activities.filter((a) => a.issuesFound > 5 && a.issuesFound <= 15).length;
-    const criticalIssues = activities.filter((a) => a.issuesFound > 15).length;
+
+    // Calculate by severity per scanned repo
+    let healthy = 0;
+    let warnings = 0;
+    let critical = 0;
+
+    activities.forEach((activity) => {
+      const issues = activity.issues;
+
+      const hasCritical = issues.some((i) => i.severity === "Critical");
+      const hasMedium = issues.some((i) => i.severity === "Medium");
+
+      if (hasCritical) {
+        critical++;
+      } else if (hasMedium) {
+        warnings++;
+      } else {
+        healthy++;
+      }
+    });
 
     const recentActivity = activities.slice(0, 5).map((act) => ({
       type: act.scanType,
       file: act.repoName,
       timeAgo: timeSince(act.createdAt),
       status:
-        act.issuesFound > 15
+        act.issues.some(i => i.severity === "Critical")
           ? "danger"
-          : act.issuesFound > 5
+          : act.issues.some(i => i.severity === "Medium")
           ? "warning"
           : "success",
     }));
@@ -27,11 +45,12 @@ const getDashboardSummary = async (req, res) => {
       totalRepos,
       cleanupsDone,
       warnings,
-      criticalIssues,
+      criticalIssues: critical,
       recentActivity,
       repoHealth: {
-        healthy: cleanupsDone - warnings - criticalIssues,
+        healthy,
         warnings,
+        critical,
       },
     });
   } catch (err) {

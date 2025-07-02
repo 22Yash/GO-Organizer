@@ -57,8 +57,16 @@ const handleGitHubCallback = async (req, res) => {
     await user.save();
 
     // Step 3: Create JWT
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        githubUsername: user.username, // Add this!
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
 
+    
     // Step 4: Redirect to frontend
     const redirectUrl = `${process.env.FRONTEND_URL}/welcome?token=${token}`;
     res.redirect(redirectUrl);

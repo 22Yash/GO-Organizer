@@ -6,8 +6,8 @@ const HeroSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center">
           <h1 className="text-4xl md:text-8xl font-bold mb-6">
-            <span className="gradient-text text-[50px]">Clean Up Your</span><br/>
-            <span className="text-gray-900 text-[80px] dark:text-white">GitHub Repositories</span><br/>
+            <span className="gradient-text md:text-[50px]">Clean Up Your</span><br/>
+            <span className="text-gray-900 md:text-[80px] dark:text-white">GitHub Repositories</span><br/>
             <span className="text-green-500 text-[50px] mt-[10px]">Automatically</span>
           </h1>
           

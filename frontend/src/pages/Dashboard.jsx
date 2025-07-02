@@ -31,6 +31,7 @@ const Dashboard = () => {
   }
 
   user = JSON.parse(localStorage.getItem("user"));
+  const username = user?.githubUsername;
 
   useEffect(() => {
     if (!token || !userId) {
@@ -171,18 +172,19 @@ const Dashboard = () => {
             <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm" >GO</span>
             </div>
-            <h1 className="text-xl font-semibold text-gray-900">
-              GitHub Organizer
+            <h1 className="text-xl flex flex-col md:flex-row font-semibold text-gray-900">
+              <span>GitHub</span> 
+              <span className="mt-[-12px] md:mt-[0px] md:ml-[10px]">Organizer</span>
             </h1>
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-gray-700">
+          <div className=" md:flex md:items-center space-x-4">
+            <div className="flex items-center space-x-2 text-gray-700 hover:bg-gray-300 hover:rounded-[10px] p-[4px]">
               <User className="w-5 h-5" />
-              <span className="font-medium">{user?.username || "User"}</span>
+              <span className="font-medium">{username || "User"}</span>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-1 text-red-600 hover:text-red-700 font-medium"
+              className="mt-[10px] md:mt-[0px] flex items-center space-x-1 text-red-600 hover:text-red-700 font-medium"
             >
               <LogOut className="w-4 h-4" />
               <span>Logout</span>
@@ -194,7 +196,7 @@ const Dashboard = () => {
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user?.name || "User"} 👋
+            Welcome back, {username || "User"} 👋
           </h2>
           <p className="text-gray-600">
             You're managing{" "}
