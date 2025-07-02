@@ -10,23 +10,23 @@ const Welcome = () => {
     const savedToken = localStorage.getItem("token");
 
     if (tokenFromURL) {
-      console.log("🔑 Token from URL:", tokenFromURL);
+      // console.log("🔑 Token from URL:", tokenFromURL);
 
       try {
         localStorage.setItem("token", tokenFromURL);
         const decoded = jwtDecode(tokenFromURL);
-        console.log("✅ Decoded User from token:", decoded);
+        // console.log("✅ Decoded User from token:", decoded);
 
         if (decoded && typeof decoded === "object" && decoded.userId) {
           localStorage.setItem("user", JSON.stringify(decoded));
-          console.log("✅ User stored, redirecting to dashboard...");
+          // console.log("✅ User stored, redirecting to dashboard...");
           navigate("/dashboard");
         } else {
-          console.error("❌ Invalid decoded user format:", decoded);
+          // console.error("❌ Invalid decoded user format:", decoded);
           navigate("/");
         }
       } catch (err) {
-        console.error("❌ JWT decoding failed:", err);
+        // console.error("❌ JWT decoding failed:", err);
         navigate("/");
       }
 
@@ -45,7 +45,7 @@ const Welcome = () => {
         navigate("/");
       }
     } else {
-      console.log("🚫 No token found anywhere, going to home");
+      // console.log("🚫 No token found anywhere, going to home");
       navigate("/");
     }
   }, [navigate]);
