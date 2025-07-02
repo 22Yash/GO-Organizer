@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 // ✅ Serve loader.io verification file
-app.get('/loaderio-abc123def456gh789.txt', (req, res) => {
+app.get('/loaderio-40c56fe35a275cbff4f14d3a7899da8c.txt', (req, res) => {
   res.sendFile(path.join(__dirname, 'loaderio-40c56fe35a275cbff4f14d3a7899da8c.txt'));
 });
 
