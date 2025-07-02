@@ -42,7 +42,7 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/dashboard/${userId}`
+          `${import.meta.env.VITE_API_URL}/api/dashboard/${userId}`
         );
         const data = await res.json();
         setDashboardData(data);
@@ -74,7 +74,7 @@ const Dashboard = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/github/repos`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/github/repos`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

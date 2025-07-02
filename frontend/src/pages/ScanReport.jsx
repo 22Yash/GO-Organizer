@@ -31,7 +31,7 @@ const ScanReport = () => {
 
   useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:5000/api/dashboard/${userId}`)
+      fetch(`${import.meta.env.VITE_API_URL}/api/dashboard/${userId}`)
         .then((res) => res.json())
         .then((data) => {
           setHistory(data.activities || []);
@@ -62,7 +62,7 @@ const ScanReport = () => {
     try {
       simulateScanProgress(); // Run in parallel
 
-      const res = await fetch('http://localhost:5000/api/scan', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/scan`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -75,7 +75,7 @@ const ScanReport = () => {
       const data = await res.json();
       setScanResult(data);
 
-      await fetch('http://localhost:5000/api/reports', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/reports`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -8,7 +8,7 @@ const RepoReportsPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/dashboard/${userId}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/dashboard/${userId}`)
       .then(res => res.json())
       .then(data => setRepos(data.activities || []))
       .catch(err => console.error("Error loading repos:", err));
@@ -37,7 +37,7 @@ const RepoReportsPage = () => {
                   View Online
                 </button>
                 <a
-                  href={`http://localhost:5000/api/report/pdf/${repo._id}`}
+                  href={`${process.env.REACT_APP_API_URL}/api/report/pdf/${repo._id}`}
                   className="text-green-600 hover:underline"
                   target="_blank"
                   rel="noopener noreferrer"

@@ -12,7 +12,7 @@ const AllRepositories = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/reports/user-repos/${userId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reports/user-repos/${userId}`);
         const data = await res.json();
         setReports(data);
       } catch (error) {
