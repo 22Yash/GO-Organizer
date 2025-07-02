@@ -4,7 +4,7 @@ import React from "react";
 const GitHubLoginButton = ({ text = "Continue with GitHub", disabled = false }) => {
   const handleLogin = () => {
     if (!disabled) {
-      window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/github`; // your OAuth route
+      window.location.href = "https://go-organizer.onrender.com/api/auth/github"; // your OAuth route
     }
   };
 
