@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path'); // ✅ required to serve static files
+const mongoose = require('mongoose');
 
 const connectDB = require("./config/db");
 const authRoutes = require('./routes/auth');
@@ -24,6 +25,19 @@ app.use(express.json());
 // ✅ Serve loader.io verification file
 app.get('/loaderio-40c56fe35a275cbff4f14d3a7899da8c.txt', (req, res) => {
   res.sendFile(path.join(__dirname, 'loaderio-40c56fe35a275cbff4f14d3a7899da8c.txt'));
+});
+
+// Health check route for UptimeRobot (keeps Render & MongoDB awake)
+app.get('/health', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState === 1) {
+      await mongoose.connection.db.admin().ping();
+      return res.status(200).json({ status: 'OK', database: 'Connected' });
+    }
+    return res.status(503).json({ status: 'Connecting', database: 'Not ready yet' });
+  } catch (error) {
+    return res.status(500).json({ status: 'Error', message: error.message });
+  }
 });
 
 // Routes
